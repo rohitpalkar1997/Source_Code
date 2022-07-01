@@ -1,0 +1,26 @@
+We can also cache the pages dynamically . i.e cache them as requested by the user
+For adding dynamic cache we make use of cache.put() function which takes 2 arguments.
+cache.add() takes an URL, sends a request and automatically stores the request-response as a key-value pair.
+cache.put() requires us to provide an request and reponse key-value pair. Put dosen't send any request, it just stores data you have.
+
+
+  self.addEventListener('fetch', function(event){
+    event.respondWith(
+        caches.match(event.request)
+        .then(function(response){
+            if(response){
+                return response;
+            }
+            else{
+                return fetch(event.request)                                          
+                .then(function(res){                               		//the above fetch will return an promise which will be handled using then() block.
+                    caches.open('Dynamic')                         		//We can store the cache in the same cache storage or we can create an different cache storage
+                     .then(function(cache){                                  //Again this caches.open will return an promise, which we need to handle it through then()
+                         cache.put(event.request.url, res.clone());		//cache.put takes 2 arguments i.e. request and response and stores it in a key value pair 
+                         return res;
+                     })
+                });
+            }
+        })
+    );      
+});

@@ -1,0 +1,9 @@
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')                   // this register function returns an promise once the sw is started/error occured while starting the sw
+    .then(function() {
+       console.log('Service Worker registered!');
+    })
+    .catch(function(){
+        console.log(err);
+    });
+}

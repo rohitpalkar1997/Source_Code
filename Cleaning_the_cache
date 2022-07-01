@@ -1,0 +1,25 @@
+*** Cleaning up the cache ***
+
+Cache needs to be cleaned regularly in order to free up the cache storage.
+We can execute the code to clean the cache anywhere like while installing the service worker or while activating the service worker, but the best place to clean up the cache is while activating the service worker.
+If we cleanup the cache while installing the service worker, then it might crash our application or it might not work as expected.
+Activate event is trigerred once the user closes the whole app and starts it again, so its safe to clear the cache here as we are not in the running environment
+
+
+
+   self.addEventListener('activate', function(event){
+    console.log('[Service Worker] Activating the service worker...', event);
+    event.waitUntil(
+        caches.keys()                                        //keys gives us keys of all the sub-caches in your cache storage.Basically it gives an array of all the sub caches that are there.
+        .then(function(keyList){                             // keyList is an array of strings with the names of our caches.
+            return Promise.all(keyList.map(function(key){    // Promise.all() takes an array of promises and waits for all of them to finish     .. map is an default js array operator which allows us 								    to tranform an array into array of promises
+            if(key!==CACHE_STATIC_NAME && key!==CACHE_DYNAMIC_NAME) {         //if key contains cache other than static and dynamic, then delete those caches.
+                console.log('[Service Worker]... Removing old cache..');
+                return caches.delete(key);                    // caches.delete removes the sub cache that is passed to it
+            }  
+            }));
+        }) 
+    );
+     return self.clients.claim();         //this line ensures that service worker works correctly, though it will also work with this line, but to be on safer side add this line. 
+ });
+

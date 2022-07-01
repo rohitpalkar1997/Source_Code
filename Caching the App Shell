@@ -1,0 +1,19 @@
+Every app has some features that are comman across all the pages and dosen't change much, like navigation bar, status bar, css files, images etc.   (These are called as app shell)
+So we cache this app shell first while creating any application or cache those things while creating the sw.
+
+
+			self.addEventListener('install', function(event) {
+		        console.log('[Service Worker] Installing the service worker ...' , event);
+   			             event.waitUntil(                                                   // This is used to start the caching event right after the sw installation event is trigerred
+				     caches.open('static')                                              // This is the function that is used to start caching i.e caches.open('name as you wish')
+        				  .then(function(cache){                                        // This caching event returns a promise which is handled using the then
+				           console.log('[Service Worker] Pre caching the App shell');
+				           cache.addAll([						  // With the help of cache.addAll([]) we can cache multiple files at the same time.
+				           	'Add the path of the files to be added',
+				                'Add the path of the files to be added',
+				                'Add the path of the files to be added'
+				           ]);                              
+       				})
+   				   )
+				});
+

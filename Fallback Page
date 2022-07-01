@@ -1,0 +1,36 @@
+*** Adding a fallback page ***
+
+If we try to access some page offline and it is not cached, then it will show some error page like http://localhost:8080 not found kind of.
+So instead of showing this page, we can add some page which will be opened in above case. These pages are called as fallback pages.
+We can add these fallback pages in the catch block of the dynamic caching code.
+
+
+self.addEventListener('fetch', function(event){
+    event.respondWith(
+        caches.match(event.request)
+        .then(function(response){
+            if(response){
+                return response;
+            }
+            else{
+                return fetch(event.request)
+                .then(function(res){
+                    caches.open(CACHE_DYNAMIC_NAME)
+                     .then(function(cache){
+                      cache.put(event.request.url, res.clone());
+                         return res;
+                     })
+                }) 
+                .catch(function(err){                                              // This is the code to add fallback pages. Make sure you add your fallback is cached.
+                    return caches.open(CACHE_STATIC_NAME)                          
+                    .then(function(cache){
+                        return caches.match('/offline.html');                      // to return cached assests we use caches.match('filename');
+                    });
+                    
+                });
+            }
+        })
+    );      
+});
+
+
