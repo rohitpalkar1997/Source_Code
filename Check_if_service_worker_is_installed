@@ -1,3 +1,5 @@
+Add this peice of code in app.js file
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')                   // this register function returns an promise once the sw is started/error occured while starting the sw
     .then(function() {
