@@ -1,0 +1,13 @@
+This is the most basic function to fetch a request from the service worker
+
+
+To fetch a request from the service worker, add this code in sw.js
+	self.addEventListener('fetch', function(event){
+           console.log('[Service Worker] Fetching something something...', event);
+           event.respondWith(fetch(event.request));                                   
+           
+}); 				      				
+	
+
+We can control and manipulate the fetch requests with the help of service worker, this is one line which can be used to react to fetch requests. We can intercept these fetch requests and perform multiple things like block the request or return some cached assets 
+
